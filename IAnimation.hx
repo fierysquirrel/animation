@@ -1,4 +1,4 @@
-package fs.animation;
+package;
 
 /**
  * Interface to represent graphic animation: Spritesheet, models, 2D, 3D, etc.

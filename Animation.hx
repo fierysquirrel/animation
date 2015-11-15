@@ -1,4 +1,4 @@
-package fs.animation;
+package;
 
 import aze.display.behaviours.TileGroupTransform;
 import aze.display.TileGroup;
@@ -19,17 +19,17 @@ import flash.text.TextField;
 /*
  * Flip: Horizontal, Vertical, None.
  * */
-enum FlipState
+/*enum FlipState
 {
 	Horizontal;
 	Vertical;
 	None;
-}
+}*/
 
  /*
   * Animation State: Play, Pause, Stop.
   * */
-enum State
+enum AnimationState
 {
 	Play;
 	Pause;
@@ -40,7 +40,7 @@ enum State
   * Animation Direction: It plays forward or backward.
   * Depends on the initial configuration.
   * */
-enum Direction
+enum AnimationDirection
 {
 	Forward;
 	Backward;
@@ -119,12 +119,12 @@ class Animation implements IAnimation
 	/*
 	 * Direction: forward, backward.
 	 */
-	private var direction : Direction;
+	private var direction : AnimationDirection;
 
 	/*
 	 * Current state: Playing, Paused, Stopped.
 	 */
-	private var state : State;
+	private var state : AnimationState;
 	
 	/*
 	 * Is the animation a loop or it could be played only once.
@@ -208,7 +208,7 @@ class Animation implements IAnimation
 	/*
 	 * Current flip.
 	 * */
-	private var flip : FlipState;
+	//private var flip : FlipState;
 	
 	private var transform : TileGroupTransform;
 	
@@ -235,7 +235,7 @@ class Animation implements IAnimation
 	 * @param isLoop is it a loop animation?.
 	 * @param fps frames per second, determine the speed of the animation.
 	 * */
-	public function new(layer : TileLayer,frames : Array<TileSprite>,fps : Int,scale : Float = 1, rotation : Float = 0) 
+	public function new(layer : TileLayer,frames : Array<TileSprite>,fps : Int,scale : Float = 1, rotation : Float = 0,type : AnimationType = null, direction : AnimationDirection = null) 
 	{
 		if (fps <= 0)
 			throw "Error: fps should be a possitive value";
@@ -245,15 +245,15 @@ class Animation implements IAnimation
 		
 		
 		this.layer = layer;
-		this.direction = Direction.Forward;
-		this.type = AnimationType.Loop;
+		this.direction = direction == null ? AnimationDirection.Forward : direction;
+		this.type = type == null ? AnimationType.Loop : type;
 		this.duration = MILLISECONDS / fps;
-		this.state = State.Stop;
+		this.state = AnimationState.Stop;
 		this.hasEnded = false;
 		this.initialFrame = 0;
 		this.finalFrame = frames.length - 1;
 		this.fps = fps;
-		this.state = State.Play;
+		this.state = AnimationState.Play;
 		this.frames = frames;
 		this.scale = scale;
 		
@@ -272,20 +272,22 @@ class Animation implements IAnimation
 			f.g = 1;
 			f.b = 1;
 			
+			//TODO: Check this structure, think about making it better
 			//Adding frames to container
-			container.addChild(f);
+			//container.addChild(f);
 		}
 		
 		colorR = 1;
 		colorG = 1;
 		colorB = 1;
 		colorA = 1;
-		flip = FlipState.None;
+		//flip = FlipState.None;
 		
 		visible = false;
 		
+		//TODO: Check this structure, think about making it better
 		//Adding container to the layer
-		layer.addChild(container);
+		//layer.addChild(container);
 	}
 	
 	public function SetPosition(x : Float, y : Float) : Void
@@ -344,7 +346,7 @@ class Animation implements IAnimation
 	/*
 	 * Gets the animation direction: Forward, Backward
 	 * */
-	public function GetDirection() : Direction 
+	public function GetDirection() : AnimationDirection 
 	{
 		return this.direction;
 	}
@@ -368,7 +370,7 @@ class Animation implements IAnimation
 	/*
 	 * Gets the current state: Play, Pause, Stop and Resume.
 	 * */
-	public function GetState() : State
+	public function GetState() : AnimationState
 	{
 		return this.state;
 	}
@@ -399,7 +401,7 @@ class Animation implements IAnimation
 	 * */
 	public function Play()
 	{
-		state = State.Play;
+		state = AnimationState.Play;
 	}
 
 	/*
@@ -407,8 +409,8 @@ class Animation implements IAnimation
 	 * */
 	public function Pause()
 	{
-		if(state == State.Play)
-			state = State.Pause;
+		if(state == AnimationState.Play)
+			state = AnimationState.Pause;
 	}
 
 	/*
@@ -416,8 +418,8 @@ class Animation implements IAnimation
 	 * */
 	public function Resume()
 	{
-		if(state == State.Pause)
-			state = State.Play;
+		if(state == AnimationState.Pause)
+			state = AnimationState.Play;
 	}
 
 	/*
@@ -425,7 +427,7 @@ class Animation implements IAnimation
 	 * */
 	public function Stop()
 	{
-		state = State.Stop;
+		state = AnimationState.Stop;
 		Restart();
 	}
 	
@@ -448,7 +450,7 @@ class Animation implements IAnimation
 	 * */
 	public function Update(gameTime:Float)
 	{
-		if (state == State.Play)
+		if (state == AnimationState.Play)
 		{
 			//This is here in case the fps change at runtime
 			duration = MILLISECONDS / fps;
@@ -458,9 +460,9 @@ class Animation implements IAnimation
 			//Check for animation ending
 			switch (direction)
 			{
-				case Direction.Forward:
+				case AnimationDirection.Forward:
 					hasEnded = currentFrame >= frames.length - 1;
-				case Direction.Backward:
+				case AnimationDirection.Backward:
 					hasEnded = currentFrame == initialFrame;
 			}
 			
@@ -482,7 +484,7 @@ class Animation implements IAnimation
 					//Update frames
 					switch (direction)
 					{
-						case Direction.Forward:
+						case AnimationDirection.Forward:
 												
 							//Update horizontal frame
 							currentFrame++;
@@ -490,7 +492,7 @@ class Animation implements IAnimation
 							if (currentFrame > finalFrame)
 								Restart();
 							
-						case Direction.Backward:
+						case AnimationDirection.Backward:
 							//Update horizontal frame
 							currentFrame--;
 
@@ -515,18 +517,18 @@ class Animation implements IAnimation
 			case AnimationType.Loop:
 				switch (direction)
 				{
-					case Direction.Forward:
+					case AnimationDirection.Forward:
 						currentFrame = initialFrame;
-					case Direction.Backward:
+					case AnimationDirection.Backward:
 						currentFrame = finalFrame;
 				}
 				hasEnded = false;
 			case AnimationType.OneWay:
 				switch (direction)
 				{
-					case Direction.Forward:
+					case AnimationDirection.Forward:
 						currentFrame = initialFrame;
-					case Direction.Backward:
+					case AnimationDirection.Backward:
 						currentFrame = finalFrame;
 				}
 				hasEnded = false;
@@ -544,11 +546,11 @@ class Animation implements IAnimation
 	{
 		switch (direction)
 		{
-			case Direction.Forward:
-				direction = Direction.Backward;
+			case AnimationDirection.Forward:
+				direction = AnimationDirection.Backward;
 				currentFrame = frames.length -1;
-			case Direction.Backward:
-				direction = Direction.Forward;
+			case AnimationDirection.Backward:
+				direction = AnimationDirection.Forward;
 				currentFrame = initialFrame;
 		}
 	}
@@ -594,10 +596,10 @@ class Animation implements IAnimation
 	 * Flips the animation: Horizontal,Vertical,None.
 	 * 
 	 * */
-	public function Flip(flip : FlipState)
+	/*public function Flip(flip : FlipState)
 	{
 		this.flip = flip;
-	}
+	}*/
 	
 	/*
 	 * Scales the animation sprite horizontally and vertically.
