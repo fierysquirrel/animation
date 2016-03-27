@@ -274,7 +274,7 @@ class Animation implements IAnimation
 			
 			//TODO: Check this structure, think about making it better
 			//Adding frames to container
-			//container.addChild(f);
+			container.addChild(f);
 		}
 		
 		colorR = 1;
@@ -288,6 +288,11 @@ class Animation implements IAnimation
 		//TODO: Check this structure, think about making it better
 		//Adding container to the layer
 		//layer.addChild(container);
+	}
+	
+	public function GetContainer() : TileGroup
+	{
+		return container;
 	}
 	
 	public function SetPosition(x : Float, y : Float) : Void
