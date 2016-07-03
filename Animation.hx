@@ -356,6 +356,7 @@ class Animation implements IAnimation
 		return this.direction;
 	}
 
+	//TODO: This has to be fixed. This is not an event, this is an EventDispatcher, not the same.
 	/*
 	 * Event fired when the animation ends.
 	 * */
