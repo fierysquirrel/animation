@@ -1,9 +1,9 @@
 package;
 
-import aze.display.behaviours.TileGroupTransform;
-import aze.display.TileGroup;
-import aze.display.TileLayer;
-import aze.display.TileSprite;
+import openfl.display.Tile;
+import openfl.display.Tilemap;
+import openfl.display.Tileset;
+
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.geom.Point;
@@ -13,7 +13,9 @@ import flash.text.TextField;
  * Represents an animation in 2 dimensions. 
  * Made from a Sprite Sheet.
  * 
- * @author Henry D. Fernández B.
+ * @author Fiery Squirrel
+ * @link http://www.fierysquirrel.com
+ * @version 1.0
  */
 
 /*
@@ -111,6 +113,10 @@ class Animation implements IAnimation
 	 */
 	private var id : String;
 	
+	private var x : Float;
+	
+	private var y : Float;
+	
 	/*
 	 * Has the animation ended?.
 	 */
@@ -149,7 +155,7 @@ class Animation implements IAnimation
 	/*
 	 * Set of frames that represent the animation.
 	 * */
-	private var frames : Array<TileSprite>;
+	private var frames : Array<Tile>;
 	
 	/*
 	 * Current frame index.
@@ -174,7 +180,7 @@ class Animation implements IAnimation
 	private var elapsedTime : Float;
 	
 	
-	private var layer : TileLayer;
+	private var layer : Tilemap;
 	/*
 	 * Sprite circle to draw the center of the frame.
 	 * */
@@ -210,7 +216,7 @@ class Animation implements IAnimation
 	 * */
 	//private var flip : FlipState;
 	
-	private var transform : TileGroupTransform;
+	//private var transform : TileGroupTransform;
 	
 	private var visible : Bool;
 	
@@ -222,7 +228,7 @@ class Animation implements IAnimation
 	private var scale : Float;
 	
 	
-	private var container : TileGroup;
+	//private var container : TileGroup;
 
 	
 	/*
@@ -235,7 +241,7 @@ class Animation implements IAnimation
 	 * @param isLoop is it a loop animation?.
 	 * @param fps frames per second, determine the speed of the animation.
 	 * */
-	public function new(layer : TileLayer,frames : Array<TileSprite>,fps : Int,scale : Float = 1, rotation : Float = 0,type : AnimationType = null, direction : AnimationDirection = null) 
+	public function new(layer : Tilemap,frames : Array<Tile>,fps : Int,scale : Float = 1, rotation : Float = 0,type : AnimationType = null, direction : AnimationDirection = null) 
 	{
 		if (fps <= 0)
 			throw "Error: fps should be a possitive value";
@@ -257,7 +263,7 @@ class Animation implements IAnimation
 		this.frames = frames;
 		this.scale = scale;
 		
-		container = new TileGroup(layer);
+		//container = new TileGroup(layer);
 		currentFrame = initialFrame;
 		elapsedTime = INIT_TIME;
 		endedEvent = new EventDispatcher();
@@ -265,16 +271,19 @@ class Animation implements IAnimation
 		//Frames
 		for (f in frames)
 		{
-			f.scale = scale;
+			f.scaleX = scale;
+			f.scaleY = scale;
 			f.rotation = rotation;
 			f.visible = false;
-			f.r = 1;
-			f.g = 1;
-			f.b = 1;
+			//f.r = 1;
+			//f.g = 1;
+			//f.b = 1;
 			
 			//TODO: Check this structure, think about making it better
 			//Adding frames to container
-			container.addChild(f);
+			layer.addTile(f);
+			
+			//container.addChild(f);
 		}
 		
 		colorR = 1;
@@ -290,15 +299,17 @@ class Animation implements IAnimation
 		//layer.addChild(container);
 	}
 	
-	public function GetContainer() : TileGroup
+	/*public function GetContainer() : TileGroup
 	{
 		return container;
-	}
+	}*/
 	
 	public function SetPosition(x : Float, y : Float) : Void
 	{
-		container.x = x;
-		container.y = y;
+		//container.x = x;
+		//container.y = y;
+		this.x = x;
+		this.y = y;
 	}
 	
 	public function SetName(name : String) : Void
@@ -311,7 +322,7 @@ class Animation implements IAnimation
 		return name;
 	}
 	
-	public function GetFrames() : Array<TileSprite>
+	public function GetFrames() : Array<Tile>
 	{
 		return frames;
 	}
@@ -343,7 +354,7 @@ class Animation implements IAnimation
 	/*
 	 * Gets the animation direction: Forward, Backward
 	 * */
-	public function GetCurrentFrame() : TileSprite
+	public function GetCurrentFrame() : Tile
 	{
 		return frames[currentFrame];
 	}
@@ -509,6 +520,8 @@ class Animation implements IAnimation
 
 				elapsedTime = INIT_TIME;
 			}
+			frames[currentFrame].x = x;
+			frames[currentFrame].y = y;
 			frames[currentFrame].visible = true && visible;	
 		}
 	}
@@ -615,7 +628,8 @@ class Animation implements IAnimation
 	 * */
 	public function Scale(scale : Float)
 	{
-		frames[currentFrame].scale = scale * this.scale;
+		frames[currentFrame].scaleX = scale * this.scale;
+		frames[currentFrame].scaleY = scale * this.scale;
 	}
 	
 	public function ScaleX(scale : Float)
@@ -645,9 +659,9 @@ class Animation implements IAnimation
 		colorG = g;
 		colorB = b;
 		
-		frames[currentFrame].r = r;
+		/*frames[currentFrame].r = r;
 		frames[currentFrame].g = g;
-		frames[currentFrame].b = b;
+		frames[currentFrame].b = b;*/
 	}
 	
 	/*

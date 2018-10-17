@@ -3,7 +3,9 @@ package;
 /**
  * Interface to represent graphic animation: Spritesheet, models, 2D, 3D, etc.
  * 
- * @author Henry D. Fernández B.
+ * @author Fiery Squirrel
+ * @link http://www.fierysquirrel.com
+ * @version 1.0
  */
 
 interface IAnimation 
