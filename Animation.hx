@@ -2,7 +2,6 @@ package;
 
 import openfl.display.Tile;
 import openfl.display.Tilemap;
-import openfl.display.Tileset;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
@@ -18,6 +17,7 @@ import flash.text.TextField;
  * @version 1.0
  */
 
+ //TODO: Review Flip
 /*
  * Flip: Horizontal, Vertical, None.
  * */
@@ -181,6 +181,8 @@ class Animation implements IAnimation
 	
 	
 	private var layer : Tilemap;
+	
+	//TODO: replace this (for debugging)
 	/*
 	 * Sprite circle to draw the center of the frame.
 	 * */
@@ -197,12 +199,12 @@ class Animation implements IAnimation
 	private var colorR : Float;
 	
 	/*
-	 * Red color.
+	 * Green color.
 	 * */
 	private var colorG : Float;
 	
 	/*
-	 * Red color.
+	 * Blue color.
 	 * */
 	private var colorB : Float;
 	
@@ -216,7 +218,6 @@ class Animation implements IAnimation
 	 * */
 	//private var flip : FlipState;
 	
-	//private var transform : TileGroupTransform;
 	
 	private var visible : Bool;
 	
@@ -227,8 +228,6 @@ class Animation implements IAnimation
 	 * */
 	private var scale : Float;
 	
-	
-	//private var container : TileGroup;
 
 	
 	/*
@@ -559,7 +558,7 @@ class Animation implements IAnimation
 	}
 
 	/// <summary>
-	/// Rever the animation.
+	/// Revert the animation.
 	/// </summary>
 	public function Revert()
 	{

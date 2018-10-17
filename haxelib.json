@@ -1,6 +1,6 @@
 {
   "name": "Animation",
-  "url": "",
+  "url": "http://fierysquirrel.com/",
   "license": "MIT",
   "tags": ["openfl","animation","sprite","2D"],
   "description": "Represents an animation in 2 dimensions. Made from a Sprite Sheet.",
@@ -10,5 +10,6 @@
   "dependencies": 
   {
     "openfl":"",
+	"open-atlas":""
   }
 }

@@ -5,7 +5,7 @@ package;
  * 
  * @author Fiery Squirrel
  * @link http://www.fierysquirrel.com
- * @version 1.0
+ * @version 1.1
  */
 
 interface IAnimation 
