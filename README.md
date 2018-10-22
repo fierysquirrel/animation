@@ -1,8 +1,12 @@
-# Animation
+# Animation for OpenFL
 
 A simple group of classes to display 2D animation from Sprite Sheets in OpenFL.
 
-Example:
+# Functionality:
+- Basic sprite animation
+- Play, Pause, Stop, etc
+
+# Example:
 
 ```haxe
 var inited:Bool;
@@ -56,3 +60,9 @@ function MainLoop(event : Event)
 }
  
 ```
+
+
+This is still in development, I have to fix bugs and keep improving it but the basic functionality is there.
+
+Feel free to contact me: henry@fierysquirrel.com
+http://fierysquirrel.com/
